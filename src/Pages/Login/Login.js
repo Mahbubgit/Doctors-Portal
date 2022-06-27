@@ -1,20 +1,22 @@
 import React, { useEffect } from 'react';
-import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
+import { useSendPasswordResetEmail, useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import auth from '../../firebase.init';
 import Loading from '../Shared/Loading';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
     const { register, formState: { errors }, handleSubmit } = useForm();
-
     const [
         signInWithEmailAndPassword,
         user,
         loading,
         error,
     ] = useSignInWithEmailAndPassword(auth);
+
+    const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(auth);
 
     let signInError;
     const navigate = useNavigate();
@@ -33,7 +35,7 @@ const Login = () => {
         signInError = <p className='text-center text-red-500'>{error?.message || gError?.message}</p>
     }
 
-    if (loading || gLoading) {
+    if (loading || gLoading || sending) {
         return <Loading></Loading>
     }
 
@@ -41,6 +43,19 @@ const Login = () => {
         // console.log(data);
         signInWithEmailAndPassword(data.email, data.password);
     };
+
+    const resetPassword = async (event) => {
+        const userEmail = register.email;
+        console.log(userEmail);
+        if (userEmail) {
+            await sendPasswordResetEmail(userEmail);
+            toast('Sent email for reset password');
+        }
+        else {
+            toast('Please enter your email address');
+        }
+    }
+
     return (
         <div className='flex h-screen justify-center items-center'>
             <div className="card w-96 bg-base-100 shadow-xl">
@@ -98,7 +113,9 @@ const Login = () => {
                                 {errors.password?.type === 'minLength' && <span className="label-text-alt text-red-600">{errors.password.message}</span>}
                             </label>
                         </div>
+
                         {signInError}
+                        <button className='btn btn-link text-secondary justify-start capitalize font-bold' onClick={resetPassword}>Forget Password?</button>
                         <input className='btn w-full max-w-xs' type="submit" value="Login" />
                     </form>
                     <p>New to Doctors Portal? <Link to="/signup" className='text-secondary'>Create New Account</Link></p>
