@@ -5,6 +5,7 @@ import auth from '../../firebase.init';
 import Loading from '../Shared/Loading';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import useToken from '../../hooks/useToken';
 
 const Login = () => {
     const [signInWithGoogle, gUser, gLoading, gError] = useSignInWithGoogle(auth);
@@ -18,6 +19,8 @@ const Login = () => {
 
     const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(auth);
 
+    const [token] = useToken(user || gUser);
+
     let signInError;
     const navigate = useNavigate();
     const location = useLocation();
@@ -25,11 +28,11 @@ const Login = () => {
     let from = location.state?.from?.pathname || "/";
 
     useEffect(() => {
-        if (user || gUser) {
+        if (token) {
             // console.log(user || gUser);
             navigate(from, { replace: true });
         }
-    }, [user, gUser, from, navigate]);
+    }, [token, from, navigate]);
 
     if (error || gError) {
         signInError = <p className='text-center text-red-500'>{error?.message || gError?.message}</p>
@@ -45,15 +48,15 @@ const Login = () => {
     };
 
     const resetPassword = async (event) => {
-        const userEmail = register.email;
-        console.log(userEmail);
-        if (userEmail) {
-            await sendPasswordResetEmail(userEmail);
-            toast('Sent email for reset password');
-        }
-        else {
-            toast('Please enter your email address');
-        }
+        // const userEmail = register.email;
+        // console.log(userEmail);
+        // if (userEmail) {
+        //     await sendPasswordResetEmail(userEmail);
+        //     toast('Sent email for reset password');
+        // }
+        // else {
+        //     toast('Please enter your email address');
+        // }
     }
 
     return (

@@ -1,0 +1,11 @@
+th{
+text-align: center;
+}
+td{
+text-align: center;
+border: 1px solid gray;
+}
+.trAppointment:hover{
+    cursor: pointer;
+    color: red;
+}
