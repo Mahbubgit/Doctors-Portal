@@ -4,12 +4,13 @@ import Loading from '../Shared/Loading';
 import UserRow from './UserRow';
 
 const Users = () => {
-    const { data: users, isLoading, refetch } = useQuery('users', () => fetch('http://localhost:5000/user', {
+    const { data: users, isLoading, refetch } = useQuery('users', () => fetch('https://socialist-drake-47567.herokuapp.com/user', {
         method: 'GET',
-        headers:{
+        headers: {
             authorization: `Bearer ${localStorage.getItem('accessToken')}`
         }
-    }).then(res => res.json()));
+    })
+    .then(res => res.json()));
 
     if (isLoading) {
         return <Loading></Loading>
@@ -17,21 +18,22 @@ const Users = () => {
 
     return (
         <div>
-            <h2 className="text-2xl">All users {users.length}</h2>
+            <h2 className="text-2xl">All users: {users.length}</h2>
             <div className="overflow-x-auto">
                 <table className="table w-full">
                     <thead>
                         <tr>
-                            <th></th>
-                            <th>Name</th>
-                            <th>Job</th>
-                            <th>Favorite Color</th>
+                            <th>Sl No</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Remove User</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            users.map(user => <UserRow
+                            users.map((user,index) => <UserRow
                                 key={user._id}
+                                index={index}
                                 user={user}
                                 refetch={refetch}
                             ></UserRow>)

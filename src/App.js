@@ -38,7 +38,7 @@ function App() {
         <Route path="/signup" element={<SignUp></SignUp>} />
       </Routes>
       <ToastContainer></ToastContainer>
-      <button className="btn w-64 rounded-full bg-primary">Button</button>
+      {/* <button className="btn w-64 rounded-full bg-primary">Button</button> */}
     </div>
   );
 }

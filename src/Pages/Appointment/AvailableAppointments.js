@@ -13,14 +13,14 @@ const AvailableAppointments = ({ date }) => {
     // const [services, setServices] = useState([]);
     // useEffect(() => {
     //     // fetch('services.json')
-    //     // fetch('http://localhost:5000/service')
-    //     fetch(`http://localhost:5000/available?date=${formattedDate}`)
+    //     // fetch('https://socialist-drake-47567.herokuapp.com/service')
+    //     fetch(`https://socialist-drake-47567.herokuapp.com/available?date=${formattedDate}`)
     //         .then(res => res.json())
     //         .then(data => setServices(data));
     // }, [formattedDate])
 
     const {data: services, isLoading, refetch } = useQuery(['available', formattedDate], () =>
-    fetch(`http://localhost:5000/available?date=${formattedDate}`)
+    fetch(`https://socialist-drake-47567.herokuapp.com/available?date=${formattedDate}`)
              .then(res => res.json())
     )
     if(isLoading){
