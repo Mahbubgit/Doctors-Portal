@@ -5,6 +5,7 @@ import './MyAppointment.css';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
+import { Link } from 'react-router-dom';
 
 const MyAppointment = () => {
     const [user] = useAuthState(auth);
@@ -24,7 +25,7 @@ const MyAppointment = () => {
                     if (res.status === 401 || res.status === 403) {
                         signOut(auth);
                         localStorage.removeItem('accessToken');
-                        navigate('/');
+                        navigate("/");
                     }
                     return res.json()
                 })
@@ -32,16 +33,10 @@ const MyAppointment = () => {
                     setAppointments(data)
                 });
         }
-    }, [user])
-
-    // const handleCancelAppointment = () => {
-    //     fetch(`https://socialist-drake-47567.herokuapp.com/delete?patient=${user.email}&date=${appointments.date}$slot=${appointments.slot}&treatment=${appointments.treatment}`)
-    //         .then(res => res.json())
-    //         .then(data => setAppointments(data));
-    // }
+    }, [user]);
 
     const handleCancelAppointment = id => {
-        console.log(id);
+        // console.log(id);
         const cancelConfirm = window.confirm('Are you sure to cancel your appointment?');
         if (cancelConfirm) {
             const url = `https://socialist-drake-47567.herokuapp.com/booking/${id}`;
@@ -69,20 +64,27 @@ const MyAppointment = () => {
                             <th>Date</th>
                             <th>Time</th>
                             <th>Treatment</th>
+                            <th>Payment</th>
                             <th>Cancel</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            appointments.map((a, index) => <tr className='trAppointment'>
+                            appointments.map((a, index) => 
+                            <tr className='trAppointment'>
                                 <td>{index + 1}</td>
                                 <td>{a.patientName}</td>
                                 <td>{a.date}</td>
                                 <td>{a.slot}</td>
                                 <td>{a.treatment}</td>
                                 <td>
+                                    {(a.price && !a.paid) && <Link to={`/dashboard/payment/${a._id}`}><button className='btn btn-secondary text-white h-6 w-12'>Pay</button></Link>}
+                                    {(a.price && a.paid) && <span><button className='text-success h-6 w-12'>Paid</button></span>}
+                                
+                                </td>
+                                <td>
                                     <button onClick={() => handleCancelAppointment(a._id)} className='btn btn-square btn-outline'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                                     </button>
                                 </td>
                             </tr>)
