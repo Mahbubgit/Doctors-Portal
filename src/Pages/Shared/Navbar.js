@@ -23,7 +23,7 @@ const Navbar = () => {
         <li><Link to="/contact">Contact</Link></li>
         <li><Link to="/about">About</Link></li>
         {
-            user && <li><Link to="/dashboard">Dashboart</Link></li>
+            user && <li><Link to="/dashboard">Dashboard</Link></li>
         }
         <li>{
             user

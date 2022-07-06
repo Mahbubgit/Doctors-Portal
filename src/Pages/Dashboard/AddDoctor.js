@@ -15,7 +15,7 @@ const AddDoctor = () => {
      */
     const { register, formState: { errors }, handleSubmit, reset } = useForm();
 
-    const { data: services, isLoading } = useQuery('services', () => fetch('http://localhost:5000/service').then(res => res.json()));
+    const { data: services, isLoading } = useQuery('services', () => fetch('https://socialist-drake-47567.herokuapp.com/service').then(res => res.json()));
     const imageStorageKey = '8be01473d7fc1567a492620a31b4d0fc';
 
     const onSubmit = async data => {
@@ -40,7 +40,7 @@ const AddDoctor = () => {
                         img: img
                     }
                     // send to your database
-                    fetch('http://localhost:5000/doctor', {
+                    fetch('https://socialist-drake-47567.herokuapp.com/doctor', {
                         method: 'POST',
                         headers: {
                             'content-type': 'application/json',
